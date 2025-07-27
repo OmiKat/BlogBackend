@@ -20,10 +20,10 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id",nullable = false , unique = true)
-    UUID id;
+    private UUID id;
 
     @Column(name = "name", nullable = false , unique = true)
-    String name;
+    private String name;
 
     @OneToMany
     @JoinColumn(name = "post_id")

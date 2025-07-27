@@ -14,15 +14,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Data
+@Table(name = "tags")
 public class Tags {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id" , nullable = false , unique = true)
-    UUID id;
+    private UUID id;
 
     @Column(name = "name" , nullable = false)
-    String name;
+    private String name;
 
     @ManyToMany
     @JoinColumn(name = "post_id")
