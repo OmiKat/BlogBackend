@@ -1,11 +1,9 @@
 package com.omi.Blog.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Table(name = "tags")
 public class Tags {
 
@@ -25,9 +24,8 @@ public class Tags {
     @Column(name = "name" , nullable = false)
     private String name;
 
-    @ManyToMany
-    @JoinColumn(name = "post_id")
-    List<Post> posts;
+    @ManyToMany(mappedBy = "tags")
+    List<Post> posts = new ArrayList<>();
 
 
 }

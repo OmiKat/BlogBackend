@@ -2,16 +2,15 @@ package com.omi.Blog.Model.Entity;
 
 import com.omi.Blog.Enum.PostStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,32 +23,52 @@ public class Post {
     @Column(name = "id" , nullable = false ,unique = true)
     private UUID id;
 
-    @Column(name = "title" , nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "content" , nullable = false)
+    @Column(, nullable = false)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id" , nullable = false)
     private User author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToMany
-    @JoinColumn(name = "tags_id")
-    Set<Tags> tags;
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tags_id")
+    )
+    Set<Tags> tags = new HashSet<>();
 
-    @Column(name = "post_status" , nullable = false)
+    @Column(nullable = false , columnDefinition = "TEXT")
+    @Enumerated(EnumType.STRING)
     private PostStatus postStatus;
 
-    @Column(name = "reading_time" , nullable = false)
+    @Column(nullable = false)
     private Integer readingTime;
 
-    @Column(name = "created_at" , nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name =  "updated_at" , nullable = false)
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
+
 
 }

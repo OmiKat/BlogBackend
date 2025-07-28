@@ -1,16 +1,15 @@
 package com.omi.Blog.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,7 +24,6 @@ public class Category {
     @Column(name = "name", nullable = false , unique = true)
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "post_id")
-    List<Post> posts;
+    @OneToMany(mappedBy = "category" )
+    List<Post> posts = new ArrayList<>();
 }
