@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id" , nullable = false ,unique = true)
+    @Column(nullable = false ,unique = true)
     private UUID id;
 
     @Column(nullable = false)
@@ -43,7 +44,7 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tags_id")
     )
-    Set<Tags> tags = new HashSet<>();
+    private Set<Tags> tags = new HashSet<>();
 
     @Column(nullable = false , columnDefinition = "TEXT")
     @Enumerated(EnumType.STRING)
@@ -70,5 +71,15 @@ public class Post {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && Objects.equals(author, post.author) && Objects.equals(category, post.category) && postStatus == post.postStatus && Objects.equals(readingTime, post.readingTime) && Objects.equals(createdAt, post.createdAt) && Objects.equals(updatedAt, post.updatedAt);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, content, author, category, postStatus, readingTime, createdAt, updatedAt);
+    }
 }

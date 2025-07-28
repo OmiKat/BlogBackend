@@ -19,43 +19,40 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(name = "id" , nullable = false , unique = true)
+    @Column(nullable = false , unique = true)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "email" , nullable = false , unique = true)
+    @Column(nullable = false , unique = true)
     private String email;
 
-    @Column(name = "password" , nullable = false)
+    @Column( nullable = false)
     private String password;
 
-    @Column(name = "name" , nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "created_at" , nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "author" , cascade = CascadeType.ALL , orphanRemoval = true)  //it will search for author in post class
-    List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(createdAt, user.createdAt) && Objects.equals(posts, user.posts);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password, name, createdAt, posts);
-    }
 
     @PrePersist
     protected void onCreate(){
         this.createdAt = LocalDateTime.now();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(createdAt, user.createdAt);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, name, createdAt);
+    }
 }

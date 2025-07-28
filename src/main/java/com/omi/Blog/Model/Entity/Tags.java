@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -18,14 +19,24 @@ public class Tags {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id" , nullable = false , unique = true)
+    @Column(nullable = false , unique = true)
     private UUID id;
 
-    @Column(name = "name" , nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Tags tags = (Tags) o;
+        return Objects.equals(id, tags.id) && Objects.equals(name, tags.name);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }
