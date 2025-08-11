@@ -22,7 +22,7 @@ public interface CategoryMapper {
     @Mapping(target = "posts", ignore = true)
     Category toEntity(CategoryDto categoryDto);
 
-    Category toEntity(CreateCategoryRequest categoryRequest);
+    Category toEntity(CreateCategoryRequest categoryRequest);  
 
 
     @Named("calculatePostCount")
