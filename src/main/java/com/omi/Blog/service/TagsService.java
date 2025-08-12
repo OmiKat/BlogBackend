@@ -9,5 +9,5 @@ public interface TagsService {
 
     List<Tags> getAll();
 
-    List<Tags> createTag(Set<String> tagnames);
+    List<Tags> createTag(Set<String> tagNames);
 }

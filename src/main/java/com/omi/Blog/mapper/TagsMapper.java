@@ -11,6 +11,7 @@ import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TagsMapper {
@@ -26,7 +27,7 @@ public interface TagsMapper {
 
 
     @Named("calculatePostCount")
-    default long calkulatePostKuht(List<Post> posts){
+    default long calkulatePostKuht(Set<Post> posts){
         if(posts == null){
             return 0;
         }

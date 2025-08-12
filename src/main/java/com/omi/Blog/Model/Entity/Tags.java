@@ -3,10 +3,7 @@ package com.omi.Blog.Model.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @AllArgsConstructor
@@ -26,7 +23,7 @@ public class Tags {
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    private List<Post> posts = new ArrayList<>();
+    private Set<Post> posts = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

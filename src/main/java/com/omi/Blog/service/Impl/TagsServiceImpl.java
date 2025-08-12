@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class TagsServiceImpl implements TagsService {
                 .filter(name -> !existingTagNamesSet.contains(name))
                 .map(name -> Tags.builder()
                         .name(name)
-                        .posts(new ArrayList<>())
+                        .posts(new HashSet<>())
                         .build())
                 .toList();
         List<Tags> savedTags = new ArrayList<>();

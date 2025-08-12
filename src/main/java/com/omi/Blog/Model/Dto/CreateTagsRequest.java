@@ -18,6 +18,6 @@ import java.util.Set;
 public class CreateTagsRequest {
 
     @Size(max = 10 , message = "cannot add more that {max} tags")
-    private Set<String> tagNames;
+    private Set<String> names;
 
 }
