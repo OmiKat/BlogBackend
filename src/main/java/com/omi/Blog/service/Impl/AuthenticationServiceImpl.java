@@ -1,6 +1,8 @@
 package com.omi.Blog.service.Impl;
 
 import com.omi.Blog.service.AuthenticationService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -49,7 +51,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExp))
                 .signWith(getSigningKey() , SignatureAlgorithm.HS256)
                 .compact();
+    }
 
+    @Override
+    public UserDetails validateToken(String token) {
+        String username = extractUsername(token);
+        // ! coz this thing right here returns the userDetails object -> this stupid shit right here
+        return userDetailsService.loadUserByUsername(username);
+    }
+
+
+    // *  this is parsing JWT and extracting username from it
+    private String extractUsername(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
     }
 
     private Key getSigningKey(){
