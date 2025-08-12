@@ -1,5 +1,6 @@
 package com.omi.Blog.Config;
 
+import com.omi.Blog.Model.Entity.User;
 import com.omi.Blog.Repo.UserRepo;
 import com.omi.Blog.security.BlogUserDetailService;
 import com.omi.Blog.security.JwtAuthFilter;
@@ -26,7 +27,22 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepo repo){
-        return new BlogUserDetailService(repo);
+        BlogUserDetailService blogUserDetailService = new BlogUserDetailService(repo);
+
+        String email = "test@gmail.com" ;
+
+        repo.findByEmail(email).orElseGet( () -> {
+
+            User testUser = User.builder()
+                    .name("Test User")
+                    .email(email)
+                    .password(passwordEncoder().encode("123456"))
+                    .build();
+            return repo.save(testUser);
+        });
+        return blogUserDetailService;
+
+
     }
 
 
@@ -40,7 +56,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception{
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST,"/api/v1/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/tags/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/categories/**").permitAll()

@@ -4,6 +4,7 @@ import com.omi.Blog.Model.Dto.CategoryDto;
 import com.omi.Blog.Model.Dto.CreateCategoryRequest;
 import com.omi.Blog.Model.Entity.Category;
 import com.omi.Blog.mapper.CategoryMapper;
+import com.omi.Blog.service.CategoryService;
 import com.omi.Blog.service.Impl.CategoryServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,13 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/{category-id}")
+    public ResponseEntity<CategoryDto> UpdateCategory(@RequestBody CategoryDto dto , @PathVariable("category-id") UUID id){
+        Category category = mapper.toEntity(dto);
+        Category updateCategory = service.updateCategory(category , id);
+        CategoryDto updatedDto = mapper.toDto(updateCategory);
+        return ResponseEntity.ok(updatedDto);
+    }
 
 
 }

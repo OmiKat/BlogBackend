@@ -12,7 +12,7 @@ import org.yaml.snakeyaml.tokens.ValueToken;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/auth/login")
 public class AuthController {
 
     private final AuthenticationService service;
@@ -30,7 +30,7 @@ public class AuthController {
                 .expiresIn(86400000)
                 .build();
 
-        return new ResponseEntity<>(build , HttpStatus.CREATED);
+        return new ResponseEntity<>(build , HttpStatus.OK);
 
     }
 

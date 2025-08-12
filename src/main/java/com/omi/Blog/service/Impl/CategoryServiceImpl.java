@@ -6,6 +6,7 @@ import com.omi.Blog.Repo.CategoryRepo;
 import com.omi.Blog.service.CategoryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(UUID id) {
+    public void deleteCategory(UUID id){
         Optional<Category> category = repo.findById(id);
         if(category.isPresent()){
             if(!category.get().getPosts().isEmpty()){
@@ -44,5 +45,16 @@ public class CategoryServiceImpl implements CategoryService {
                 repo.deleteById(id);
             }
         }
+    }
+
+    @Override
+    public Category updateCategory(Category category, UUID id) {
+        Category existingCategory = repo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category does not exist"));
+
+        existingCategory.setName(category.getName());
+
+        return repo.save(category);
+
     }
 }
