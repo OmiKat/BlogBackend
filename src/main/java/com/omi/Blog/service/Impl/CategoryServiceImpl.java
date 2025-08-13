@@ -4,6 +4,7 @@ import com.omi.Blog.Model.Dto.CategoryDto;
 import com.omi.Blog.Model.Entity.Category;
 import com.omi.Blog.Repo.CategoryRepo;
 import com.omi.Blog.service.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
@@ -56,5 +57,11 @@ public class CategoryServiceImpl implements CategoryService {
 
         return repo.save(category);
 
+    }
+
+    @Override
+    public Category findCategoryById(UUID id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("The category does not exits"));
     }
 }

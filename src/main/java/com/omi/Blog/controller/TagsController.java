@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,9 +36,19 @@ public class TagsController {
         List<TagsDto> tagsDtos = savedTags.stream().map(mapper::toDto).toList();
 
         return new ResponseEntity<>(tagsDtos, HttpStatus.CREATED);
-
-
-
     }
 
+    @DeleteMapping("/{tag-id}")
+    public ResponseEntity<Void> deleteTag(@PathVariable("tag-id")UUID id){
+        service.deleteTag(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+//    @PutMapping("/{tag-id}")
+//    public ResponseEntity<TagsDto> updateTag(@PathVariable("tag-id") UUID id ,@RequestBody TagsDto tagsDto){
+//        Tags tags = mapper.toEntity(tagsDto);
+//        Tags updatedTag = service.updateATag(id, tags);
+//        TagsDto updatedDto = mapper.toDto(updatedTag);
+//        return new ResponseEntity<>(updatedDto, HttpStatus.OK);
+//    }
 }

@@ -1,6 +1,7 @@
 package com.omi.Blog.controller;
 
 import com.omi.Blog.Model.Dto.ApiError;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,16 @@ public class ErrorController {
                 .message(ex.getMessage())
                 .build();
         return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
+    }
+
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiError> handelEntityNotFoundException(EntityNotFoundException ex){
+        ApiError error = ApiError.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
     }
 
 }
