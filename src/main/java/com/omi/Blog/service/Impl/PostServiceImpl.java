@@ -36,5 +36,21 @@ public class PostServiceImpl implements PostService {
                     tag
             );
         }
+        if(categoryId != null){
+            Category category = categoryService.findCategoryById(categoryId);
+            return postRepo.findByStatusAndCategory(
+                    PostStatus.PUBLISHED,
+                    category
+            );
+        }
+        if(tagId != null){
+            Tags tag = tagsService.findTagById(tagId);
+            return postRepo.findByStatusAndTags(
+                    PostStatus.PUBLISHED,
+                    tag
+            );
+        }
+
+        return postRepo.findByStatus(PostStatus.PUBLISHED);
     }
 }
