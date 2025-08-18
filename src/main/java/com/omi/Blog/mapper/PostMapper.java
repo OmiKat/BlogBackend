@@ -1,5 +1,7 @@
 package com.omi.Blog.mapper;
 
+import com.omi.Blog.Model.CreatePostRequest;
+import com.omi.Blog.Model.Dto.CreatePostRequestDto;
 import com.omi.Blog.Model.Dto.PostDto;
 import com.omi.Blog.Model.Entity.Post;
 import org.mapstruct.Mapper;
@@ -20,6 +22,9 @@ public interface PostMapper {
     @Mapping(target = "category" , source = "category")
     @Mapping(target = "tags" , source = "tags")
     Post toEntity(PostDto postDto);
+
+
+    CreatePostRequest toDto(CreatePostRequestDto createPostRequestDto);
 
 
 }

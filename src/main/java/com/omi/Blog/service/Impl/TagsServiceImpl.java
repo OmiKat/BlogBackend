@@ -74,7 +74,18 @@ public class TagsServiceImpl implements TagsService {
                         new EntityNotFoundException("The tag does not Exist"));
     }
 
-//    @Override
+    @Override
+    public List<Tags> findAllbyId(Set<UUID> ids) {
+        List<Tags> allById = repo.findAllById(ids);
+        if(allById.size() != ids.size()){
+            throw new EntityNotFoundException("tags not found");
+        }
+        return allById;
+    }
+
+
+
+    //    @Override
 //    public Tags updateATag(UUID id, Tags tags) {
 //        Tags existingTag = repo.findById(id)
 //                .orElseThrow(() -> new IllegalArgumentException("the tag does not exist"));

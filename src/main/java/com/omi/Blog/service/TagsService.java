@@ -16,5 +16,7 @@ public interface TagsService {
 
     Tags findTagById(UUID id);
 
+    List<Tags> findAllbyId(Set<UUID> ids);
+
 //    Tags updateATag(UUID id, Tags tags);
 }

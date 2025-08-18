@@ -1,9 +1,11 @@
 package com.omi.Blog.service.Impl;
 
 import com.omi.Blog.Enum.PostStatus;
+import com.omi.Blog.Model.CreatePostRequest;
 import com.omi.Blog.Model.Entity.Category;
 import com.omi.Blog.Model.Entity.Post;
 import com.omi.Blog.Model.Entity.Tags;
+import com.omi.Blog.Model.Entity.User;
 import com.omi.Blog.Repo.PostRepo;
 import com.omi.Blog.service.CategoryService;
 import com.omi.Blog.service.PostService;
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -56,18 +60,30 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post createPost(Post requestPostEntity) {
-//        Post build = Post.builder()
-//                .title(requestPostEntity.getTitle())
-//                .content(requestPostEntity.getContent())
-//                .author(requestPostEntity.getAuthor())
-//                .category(requestPostEntity.getCategory())
-//                .tags(requestPostEntity.getTags())
-//                .readingTime(1)
-//                .createdAt(LocalDateTime.now())
-//                .updatedAt(LocalDateTime.now())
-//                .postStatus(requestPostEntity.getPostStatus())
-//                .build();
-        return postRepo.save(requestPostEntity);
+    @Transactional
+    public Post createPost(CreatePostRequest requestPostEntity, User user) {
+        Post newPost = new Post();
+        newPost.setTitle(requestPostEntity.getTitle());
+        newPost.setContent(requestPostEntity.getContent());
+        newPost.setPostStatus(requestPostEntity.getStatus());
+        newPost.setReadingTime(1);
+        newPost.setAuthor(user);
+
+        Category category = categoryService.findCategoryById(requestPostEntity.getCategoryId());
+        newPost.setCategory(category);
+
+        Set<UUID> tagsId = requestPostEntity.getTagsId();
+        List<Tags> tags = tagsService.findAllbyId(tagsId);
+        newPost.setTags(new HashSet<>(tags));
+
+        return postRepo.save(newPost);
+    }
+
+    @Override
+    public List<Post> getDraftPost(User user) {
+        return postRepo.findAllByAuthorAndPostStatus(
+                user,
+                PostStatus.DRAFT
+        );
     }
 }
