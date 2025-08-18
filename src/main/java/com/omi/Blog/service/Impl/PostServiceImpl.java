@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class PostServiceImpl implements PostService {
         if(categoryId != null && tagId != null ){
             Category category = categoryService.findCategoryById(categoryId);
             Tags tag = tagsService.findTagById(tagId);
-            return postRepo.findByStatusAndCategoryAndTagsContaining(
+            return postRepo.findByPostStatusAndCategoryAndTagsContaining(
                     PostStatus.PUBLISHED,
                     category,
                     tag
@@ -38,19 +39,35 @@ public class PostServiceImpl implements PostService {
         }
         if(categoryId != null){
             Category category = categoryService.findCategoryById(categoryId);
-            return postRepo.findByStatusAndCategory(
+            return postRepo.findByPostStatusAndCategory(
                     PostStatus.PUBLISHED,
                     category
             );
         }
         if(tagId != null){
             Tags tag = tagsService.findTagById(tagId);
-            return postRepo.findByStatusAndTags(
+            return postRepo.findByPostStatusAndTags(
                     PostStatus.PUBLISHED,
                     tag
             );
         }
 
-        return postRepo.findByStatus(PostStatus.PUBLISHED);
+        return postRepo.findByPostStatus(PostStatus.PUBLISHED);
+    }
+
+    @Override
+    public Post createPost(Post requestPostEntity) {
+//        Post build = Post.builder()
+//                .title(requestPostEntity.getTitle())
+//                .content(requestPostEntity.getContent())
+//                .author(requestPostEntity.getAuthor())
+//                .category(requestPostEntity.getCategory())
+//                .tags(requestPostEntity.getTags())
+//                .readingTime(1)
+//                .createdAt(LocalDateTime.now())
+//                .updatedAt(LocalDateTime.now())
+//                .postStatus(requestPostEntity.getPostStatus())
+//                .build();
+        return postRepo.save(requestPostEntity);
     }
 }

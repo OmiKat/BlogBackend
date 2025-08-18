@@ -9,4 +9,5 @@ public interface PostService {
 
     List<Post> getAllPost(UUID categoryId , UUID tagId);
 
+    Post createPost(Post requestPostEntity);
 }
